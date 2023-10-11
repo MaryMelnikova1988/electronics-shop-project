@@ -1,3 +1,6 @@
+import csv
+# file = '../src/items.csv'
+
 class Item:
     """
     Класс для представления товара в магазине.
@@ -13,7 +16,7 @@ class Item:
         :param price: Цена за единицу товара.
         :param quantity: Количество товара в магазине.
         """
-        self.name = name
+        self.__name = name
         self.price = price
         self.quantity = quantity
         self.all.append(self)
@@ -33,4 +36,41 @@ class Item:
         """
         self.price *= self.pay_rate
         return self.price
+
+    @property
+    def name(self):
+        return self.__name
+
+    @name.setter
+    def name(self, name):
+        self.__name = name[:10]
+
+    @classmethod
+    def instantiate_from_csv(cls, file):
+        """ класс-метод, инициализирующий экземпляры класса Item данными из файла src/items.csv"""
+        cls.all.clear()
+        with open(file, newline='') as csvfile:
+            reader = csv.DictReader(csvfile)
+            items = []
+            for row in reader:
+                item = cls(row['name'], float(row['price']), int(row['quantity']))
+                items.append(item)
+            cls.all = items
+            return cls.all
+
+    """[{'name': 'Смартфон', 'price': '100', 'quantity': '1'},
+     {'name': 'Ноутбук', 'price': '1000', 'quantity': '3'}, 
+     {'name': 'Кабель', 'price': '10', 'quantity': '5'}, 
+     {'name': 'Мышка', 'price': '50', 'quantity': '5'}, 
+     {'name': 'Клавиатура', 'price': '75', 'quantity': '5'}]
+     """
+
+
+    @staticmethod
+    def string_to_number(string):
+        """ статический метод, возвращающий число из числа-строки
+        Для работы с csv-файлом используйте модуль csv метод DictReader"""
+        return int(float(string))
+
+# Item.instantiate_from_csv()
 
