@@ -26,7 +26,8 @@ def test_name():
     assert item.name == 'Смартфон'
 
     # длина наименования товара больше 10 символов
-    item.name = 'СуперСмарт'
+    item.name = 'СуперСмартфон'
+    assert item.name == 'СуперСмарт'
 
 
 def test_instantiate_from_csv():
@@ -40,8 +41,8 @@ def test_string_to_number():
     assert Item.string_to_number('5.0') == 5
     assert Item.string_to_number('5.5') == 5
 
-test_init()
-test_calculate_total_price()
-test_apply_discount()
+# test_init()
+# test_calculate_total_price()
+# test_apply_discount()
 
 
