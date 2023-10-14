@@ -1,4 +1,5 @@
 import csv
+import os
 # file = '../src/items.csv'
 
 class Item:
@@ -45,11 +46,17 @@ class Item:
     def name(self, name):
         self.__name = name[:10]
 
+
     @classmethod
-    def instantiate_from_csv(cls, file):
-        """ класс-метод, инициализирующий экземпляры класса Item данными из файла src/items.csv"""
+    def instantiate_from_csv(cls, csv_filename):
+        """ класс-метод, инициализирующий экземпляры класса Item данными из файла формата ххх.csv"""
         cls.all.clear()
-        with open(file, newline='') as csvfile:
+        # Функция os.path.split() разбивает путь на кортеж (голова, хвост), где хвост - последний компонент пути, а голова - всё остальное.
+        # Хвост никогда не начинается со слеша (если путь заканчивается слешем, то хвост пустой). Если слешей в пути нет, то пустой будет голова.
+        # os.path.dirname(path) - возвращает имя директории пути path.
+        # os.path.join(path1[, path2[, ...]]) - соединяет пути с учётом особенностей операционной системы.
+        path_file = os.path.join(os.path.dirname(__file__), os.path.split(csv_filename)[1])
+        with open(path_file, 'r', encoding='windows-1251', newline='') as csvfile:
             reader = csv.DictReader(csvfile)
             items = []
             for row in reader:
