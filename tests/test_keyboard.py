@@ -9,9 +9,11 @@ def kb():
 def test_str(kb):
     # kb = Keyboard('Dark Project KD87A', 9600, 5)
     assert str(kb) == "Dark Project KD87A"
+
 def test_language(kb):
     # kb = Keyboard('Dark Project KD87A', 9600, 5)
     assert str(kb.language) == "EN"
+
 def test_change_lang(kb):
     # kb = Keyboard('Dark Project KD87A', 9600, 5)
     kb.change_lang()
@@ -19,6 +21,7 @@ def test_change_lang(kb):
     # Сделали EN -> RU -> EN
     kb.change_lang()
     assert str(kb.language) == "EN"
+
 def test_language_AttributeError(kb):
     # kb = Keyboard('Dark Project KD87A', 9600, 5)
     kb.language = 'CH'
