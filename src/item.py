@@ -60,27 +60,36 @@ class Item:
     @classmethod
     def instantiate_from_csv(cls, csv_filename):
         """ класс-метод, инициализирующий экземпляры класса Item данными из файла формата ххх.csv"""
-        cls.all.clear()
+
         # Функция os.path.split() разбивает путь на кортеж (голова, хвост), где хвост - последний компонент пути, а голова - всё остальное.
         # Хвост никогда не начинается со слеша (если путь заканчивается слешем, то хвост пустой). Если слешей в пути нет, то пустой будет голова.
         # os.path.dirname(path) - возвращает имя директории пути path.
         # os.path.join(path1[, path2[, ...]]) - соединяет пути с учётом особенностей операционной системы.
+
+        cls.all.clear()
         path_file = os.path.join(os.path.dirname(__file__), os.path.split(csv_filename)[1])
+
+        if not os.path.exists(path_file):
+            raise FileNotFoundError(f"Отсутствует файл item.csv")
+
         with open(path_file, 'r', encoding='windows-1251', newline='') as csvfile:
             reader = csv.DictReader(csvfile)
             items = []
             for row in reader:
-                item = cls(row['name'], float(row['price']), int(row['quantity']))
-                items.append(item)
-            cls.all = items
-            return cls.all
+                if 'name' not in row or 'price' not in row or 'quantity' not in row:
+                    raise InstantiateCSVError(f"Файл {csv_filename} поврежден")
+                else:
+                    item = cls(row['name'], float(row['price']), int(row['quantity']))
+                    items.append(item)
+                    cls.all = items
+                    return cls.all
 
-    """[{'name': 'Смартфон', 'price': '100', 'quantity': '1'},
-     {'name': 'Ноутбук', 'price': '1000', 'quantity': '3'}, 
-     {'name': 'Кабель', 'price': '10', 'quantity': '5'}, 
-     {'name': 'Мышка', 'price': '50', 'quantity': '5'}, 
-     {'name': 'Клавиатура', 'price': '75', 'quantity': '5'}]
-     """
+    # """[{'name': 'Смартфон', 'price': '100', 'quantity': '1'},
+    #  {'name': 'Ноутбук', 'price': '1000', 'quantity': '3'},
+    #  {'name': 'Кабель', 'price': '10', 'quantity': '5'},
+    #  {'name': 'Мышка', 'price': '50', 'quantity': '5'},
+    #  {'name': 'Клавиатура', 'price': '75', 'quantity': '5'}]
+    #  """
 
 
     @staticmethod
@@ -89,4 +98,7 @@ class Item:
         Для работы с csv-файлом используйте модуль csv метод DictReader"""
         return int(float(string))
 
+class InstantiateCSVError(Exception):
+    # def __init__(self, *args, **kwargs):
+    pass
 

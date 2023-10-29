@@ -2,6 +2,8 @@
 from src.item import Item
 from src.phone import Phone
 
+import pytest
+
 class Product:
     def __init__(self, name, price, quantity):
         self.name = name
@@ -62,3 +64,11 @@ def test_add():
     assert phone1 + phone1 == 10
     product = Product("стул", 1500, 10)
     assert item1 + product == "TypeError: Складывать можно только объекты классов с родительским классом Item"
+
+def instantiate_from_csv_FileNotFoundError():
+    with pytest.raises(FileNotFoundError):
+        Item.nstantiate_from_csv("src/item_1.csv")
+
+def instantiate_from_csv_InstantiateCSVError():
+    with pytest.raises(InstantiateCSVError):
+        Item.nstantiate_from_csv('src/items_1.csv')
